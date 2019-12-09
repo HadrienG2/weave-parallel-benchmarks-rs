@@ -1,5 +1,5 @@
 [package]
-name = "dfs"
+name = "weave-parallel-benchmarks"
 version = "0.1.0"
 authors = ["Hadrien G. <knights_of_ni@gmx.com>"]
 edition = "2018"
@@ -18,5 +18,5 @@ panic = "abort"
 # global optimizations. For this small project, the compilation performance
 # benefit is small, so we would rather have more run-time performance
 codegen-units = 1
-# Always enabling debug info is more convenient for this use case
+# Always enabling debug info is more convenient for this profiling
 debug = true
