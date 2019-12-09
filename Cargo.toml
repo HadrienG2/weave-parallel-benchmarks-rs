@@ -1,0 +1,22 @@
+[package]
+name = "dfs"
+version = "0.1.0"
+authors = ["Hadrien G. <knights_of_ni@gmx.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rayon = "1.2"
+
+
+[profile.release]
+# Aborting panics mean no app cleanup when a panic is encountered, but better
+# compiler optimizations. For scientific computation, that's a good trade-off.
+panic = "abort"
+# Parallel code generation improves compilation performance but prevents some
+# global optimizations. For this small project, the compilation performance
+# benefit is small, so we would rather have more run-time performance
+codegen-units = 1
+# Always enabling debug info is more convenient for this use case
+debug = true
