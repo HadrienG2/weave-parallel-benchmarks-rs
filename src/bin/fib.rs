@@ -11,7 +11,7 @@ fn fib(n: usize) -> usize {
         } else {
             // Non-idiomatic mode, strictly imitate the Weave version by
             // explicitly spawning one task. This will be quite slow as "scope"
-            // has not received as much optimization love as "join".
+            // has not received as much optimization love as "join"...
             let (mut x, mut y) = (0, 0);
             rayon::scope(|s| {
                 s.spawn(|_| x = fib(n - 1));
