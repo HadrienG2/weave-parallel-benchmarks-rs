@@ -5,11 +5,21 @@ fn dfs(depth: usize, breadth: usize) -> usize {
         return 1;
     }
 
-    let sums = (0..breadth).into_par_iter()
-                           .map(|_| dfs(depth-1, breadth))
-                           .collect::<Vec<_>>();
+    // It always start with scheduling "breadth" tasks, as a parallel iterator
+    // since that's the most natural Rayon tool for that job
+    let res_iter = (0..breadth).into_par_iter()
+                               .map(|_| dfs(depth-1, breadth));
 
-    sums.into_iter().sum()
+    if cfg!(feature = "idiomatic") {
+      // Idiomatic mode, do what a Rayon user normally would and sum in the same
+      // Rayon transaction for optimal performance
+      res_iter.sum()
+    } else {
+      // Non-idiomatic mode, strictly imitate the Weave version and collect the
+      // data into a heap-allocated Vec, followed by a sequential sum
+      let vec = res_iter.collect::<Vec<_>>();
+      vec.into_iter().sum()
+    }
 }
 
 fn main() {

@@ -9,6 +9,8 @@ edition = "2018"
 [dependencies]
 rayon = "1.2"
 
+[features]
+idiomatic = []
 
 [profile.release]
 # Aborting panics mean no app cleanup when a panic is encountered, but better
