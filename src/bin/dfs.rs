@@ -1,5 +1,4 @@
 use rayon::prelude::*;
-use std::sync::atomic::{AtomicUsize, Ordering};
 
 fn dfs(depth: usize, breadth: usize) -> usize {
     if depth == 0 {
@@ -23,19 +22,15 @@ fn dfs(depth: usize, breadth: usize) -> usize {
       // e.g. using a parallel Rayon iterator instead of an explicit loop, but
       // still collecting the outputs in a vector and ending with a serial sum.
       //
-      let vec = (0..breadth).map(|_| AtomicUsize::new(0))
-                            .collect::<Vec<_>>();
+      let mut vec = vec![0; breadth];
 
       rayon::scope(|s|{
-        for target in vec.iter() {
-          s.spawn(move |_| target.store(dfs(depth-1, breadth),
-                                        Ordering::Relaxed));
+        for target in vec.iter_mut() {
+          s.spawn(move |_| *target = dfs(depth-1, breadth));
         }
       });
 
-      vec.into_iter()
-         .map(|a| a.load(Ordering::Relaxed))
-         .sum()
+      vec.into_iter().sum()
     }
 }
 
